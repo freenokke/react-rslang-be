@@ -21,7 +21,10 @@ const refresh = async (userId, tokenId) => {
 
 const isTokenExpired = async (userId, tokenId) => {
   const token = await tokenRepo.get(userId, tokenId);
-  if (Date.now() > token.expire) {
+  if (
+    Date.now() > token.expire - 1980000 &&
+    Date.now() < token.expire - 180000
+  ) {
     return true;
   }
   return false;
