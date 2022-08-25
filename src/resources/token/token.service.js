@@ -19,6 +19,14 @@ const refresh = async (userId, tokenId) => {
   return getTokens(userId);
 };
 
+const isTokenExpired = async (userId, tokenId) => {
+  const token = await tokenRepo.get(userId, tokenId);
+  if (Date.now() > token.expire) {
+    return true;
+  }
+  return false;
+};
+
 const getTokens = async userId => {
   const token = jwt.sign({ id: userId }, JWT_SECRET_KEY, {
     expiresIn: JWT_EXPIRE_TIME
@@ -44,4 +52,4 @@ const getTokens = async userId => {
 
 const upsert = token => tokenRepo.upsert(token);
 
-module.exports = { refresh, getTokens, upsert };
+module.exports = { refresh, getTokens, upsert, isTokenExpired };
